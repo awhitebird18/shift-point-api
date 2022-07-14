@@ -1,4 +1,4 @@
-import Bulletin from "../models/BulletinModal.js";
+import Bulletin from "../models/bulletinModel.js";
 
 export const getBulletin = async (req, res) => {
   const bulletins = await Bulletin.find().sort({ createdAt: 1 }).limit(3);
