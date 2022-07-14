@@ -65,10 +65,15 @@ const CONNECTION_URL = `mongodb+srv://awhitebird:cha0+Sit@cluster0.g8l3k.mongodb
 mongoose
   .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
-    app.listen(PORT, () => {});
+    app.listen(PORT, () => {
+      console.log(`Connected to port ${PORT}`);
+    });
   })
-  .catch((err) => {});
+  .catch((err) => {
+    "Error connecting to mongoose", err;
+  });
 
 process.on("uncaughtException", (err) => {
-  console.error(err);
+  console.error("There was an uncaught error", err);
+  process.exit(1);
 });
