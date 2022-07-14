@@ -59,7 +59,7 @@ app.use("/shift", shiftRoutes);
 app.use("/report", reportRoutes);
 app.use("/productNews", productNewsRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3001;
 const CONNECTION_URL = `mongodb+srv://awhitebird:cha0+Sit@cluster0.g8l3k.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
 mongoose
