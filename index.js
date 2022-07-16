@@ -2,6 +2,7 @@ import "dotenv/config";
 import mongoose from "mongoose";
 import express from "express";
 import cors from "cors";
+import compression from "compression";
 
 // Sends Text Message Every 20 seconds
 import "./send_sms.js";
@@ -29,11 +30,17 @@ import productNewsRoutes from "./routes/productNewsRoutes.js";
 
 const app = express();
 
+console.log("derp");
+
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
-app.use(cors());
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000",
+//   })
+// );
 
-// app.use(cors());
+app.use(cors());
 
 app.use("/timesheetrules", timesheetRulesRoutes);
 app.use("/timesheet", timesheetRoutes);
