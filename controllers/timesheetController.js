@@ -251,6 +251,8 @@ export const getWeeklyEarningBreakdown = async (req, res) => {
   currentDate.setSeconds(0);
   currentDate.setMilliseconds(0);
 
+  console.log(currentDate);
+
   const startDate = new Date(currentDate);
   const endDate = new Date(currentDate);
 
