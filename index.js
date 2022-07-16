@@ -2,7 +2,6 @@ import "dotenv/config";
 import mongoose from "mongoose";
 import express from "express";
 import cors from "cors";
-import compression from "compression";
 
 // Sends Text Message Every 20 seconds
 import "./send_sms.js";
@@ -32,11 +31,7 @@ const app = express();
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
-app.use(
-  cors({
-    origin: "https://timeqp-app.web.app",
-  })
-);
+app.use(cors());
 
 // app.use(cors());
 
