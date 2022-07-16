@@ -65,7 +65,7 @@ const PORT = process.env.PORT || 5000;
 const CONNECTION_URL = `mongodb+srv://awhitebird:cha0+Sit@cluster0.g8l3k.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 
 app.get("/", (req, res) => {
-  res.send("DERP");
+  res.send("DERPPPPPP");
 });
 
 mongoose
