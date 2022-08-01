@@ -2,9 +2,10 @@ import Shift from "../models/shiftModel.js";
 
 export const getShifts = async (req, res) => {
   let { startDate, endDate } = req.query;
-  startDate = new Date(startDate);
 
-  if (endDate === "undefined") {
+  startDate = new Date(`${startDate} 12:00 am`);
+
+  if (endDate === "undefined" || !endDate) {
     endDate = new Date(startDate.getTime());
 
     endDate.setDate(startDate.getDate() + 6);

@@ -9,6 +9,7 @@ const shiftSchema = new mongoose.Schema({
   start: Date,
   date: Date,
   colorCode: String,
+  published: Boolean,
 });
 
 const Shift = mongoose.model("Shift", shiftSchema);

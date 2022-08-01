@@ -1,8 +1,14 @@
 import express from "express";
-import { getSchedules } from "../controllers/scheduleController.js";
+import {
+  getSchedules,
+  addNewSchedule,
+  updateSchedule,
+} from "../controllers/scheduleController.js";
 
 const router = express.Router();
 
-router.route("/").get(getSchedules);
+router.route("/").get(getSchedules).post(addNewSchedule);
+
+router.route("/:id").patch(updateSchedule);
 
 export default router;

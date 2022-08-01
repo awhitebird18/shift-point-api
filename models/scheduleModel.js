@@ -5,6 +5,9 @@ const scheduleSchema = new mongoose.Schema({
   owner: String,
   employeeList: [String],
   departments: [String],
+  createdOn: Date,
+  current: Boolean,
+  publishedTo: Date,
 });
 
 const Schedule = mongoose.model("Schedule", scheduleSchema);

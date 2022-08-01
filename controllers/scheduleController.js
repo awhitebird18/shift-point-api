@@ -1,7 +1,15 @@
 import Schedule from "../models/scheduleModel.js";
+import User from "../models/userModel.js";
+import jwt from "jsonwebtoken";
 
 export const getSchedules = async (req, res) => {
-  const schedules = await Schedule.find();
+  const token = req.headers["x-access-token"];
+
+  const decoded = jwt.verify(token, "secrettokenofdoom");
+
+  const user = await User.findOne({ username: decoded.username });
+
+  const schedules = await Schedule.find({ owner: user._id });
 
   return res.status(200).json({
     status: "success",
@@ -10,7 +18,18 @@ export const getSchedules = async (req, res) => {
 };
 
 export const addNewSchedule = async (req, res) => {
-  const newSchedule = await Schedule.create(req.body);
+  const token = req.headers["x-access-token"];
+
+  const decoded = jwt.verify(token, "secrettokenofdoom");
+
+  const user = await User.findOne({ username: decoded.username });
+
+  const newSchedule = await Schedule.create({
+    ...req.body,
+    owner: user._id,
+    employeeList: [],
+    createdOn: Date.now(),
+  });
 
   return res.status(201).json({
     status: "success",

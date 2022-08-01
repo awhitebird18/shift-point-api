@@ -22,20 +22,28 @@ export const getAllUserAccounts = async (req, res) => {
 };
 
 export const getCurrentUser = async (req, res) => {
-  const token = req.headers["x-access-token"];
-  const decoded = token && jwt.verify(token, "secrettokenofdoom");
+  try {
+    const token = req.headers["x-access-token"];
+    const decoded = token && jwt.verify(token, "secrettokenofdoom");
 
-  let searchParams = {};
-  if (decoded && decoded.username) {
-    searchParams = { username: decoded.username };
+    let searchParams = {};
+    if (decoded && decoded.username) {
+      searchParams = { username: decoded.username };
+    }
+
+    const user = await User.findOne(searchParams);
+
+    console.log(user);
+
+    res.status(200).json({
+      status: "success",
+      data: user,
+    });
+  } catch (e) {
+    res.status(500).json({
+      message: "fail",
+    });
   }
-
-  const user = await User.findOne(searchParams);
-
-  res.status(200).json({
-    status: "success",
-    data: user,
-  });
 };
 
 export const createNewUserAccount = async (req, res) => {

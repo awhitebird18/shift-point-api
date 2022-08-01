@@ -18,7 +18,7 @@ router
   .post(createNewUserAccount)
   .patch(updateUserField);
 
-router.route("/currentUser").get(getCurrentUser);
+router.route("/currentuser").get(getCurrentUser);
 
 router.route("/:id").patch(updateUserAccount).delete(deleteUserAccount);
 
