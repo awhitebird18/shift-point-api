@@ -20,20 +20,8 @@ const userSchema = new mongoose.Schema({
   moduleAccess: {
     timesheet: {
       access: Boolean,
-      save: Boolean,
-      departmentChange: Boolean,
-      payrate: {
-        access: Boolean,
-        write: Boolean,
-      },
-      premium: {
-        access: Boolean,
-        write: Boolean,
-      },
-      break: {
-        access: Boolean,
-        write: Boolean,
-      },
+
+      payrate: Boolean,
     },
     scheduler: {
       access: Boolean,
@@ -42,26 +30,21 @@ const userSchema = new mongoose.Schema({
       access: Boolean,
       personal: {
         access: Boolean,
-        write: Boolean,
       },
       contact: {
         access: Boolean,
-        write: Boolean,
       },
       department: {
         access: Boolean,
-        write: Boolean,
       },
       position: {
         access: Boolean,
-        write: Boolean,
       },
       payinfo: {
         access: Boolean,
-        write: Boolean,
       },
     },
-    settings: {
+    appSettings: {
       access: Boolean,
     },
     reports: {
@@ -71,15 +54,12 @@ const userSchema = new mongoose.Schema({
       access: Boolean,
       basicinfo: {
         access: Boolean,
-        write: Boolean,
       },
       employee: {
         access: Boolean,
-        write: Boolean,
       },
       module: {
         access: Boolean,
-        write: Boolean,
       },
     },
   },

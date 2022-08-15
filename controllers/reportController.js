@@ -4,7 +4,6 @@ import Department from "../models/departmentModel.js";
 import Position from "../models/positionModel.js";
 import Earning from "../models/earningModel.js";
 import Employee from "../models/employeeModel.js";
-// import path from 'path'
 
 import dayjs from "dayjs";
 
@@ -62,27 +61,31 @@ export const getReport = async (req, res) => {
       return { name: "", eeNum: "" };
     }
 
-    const startTime = dayjs(timesheet.start);
-    const endTime = dayjs(timesheet.end);
+    const startTime = timesheet.start ? dayjs(timesheet.start) : "";
+    const endTime = timesheet.end ? dayjs(timesheet.end) : "";
     const date = dayjs(timesheet.date);
     const hours =
-      Math.round(
-        ((endTime.valueOf() - startTime.valueOf()) / 60 / 60 / 1000) * 100
-      ) / 100;
+      timesheet.start && timesheet.end
+        ? Math.round(
+            ((endTime.valueOf() - startTime.valueOf()) / 60 / 60 / 1000) * 100
+          ) / 100
+        : "";
 
     return {
       eeNum: employee.eeNum,
       name: `${employee.firstName} ${employee.lastName}`,
-      departmentNumber: department.number,
-      departmentName: department.name,
-      earningType: earning.type,
-      earningName: earning.name,
+      departmentNumber: department?.number,
+      departmentName: department?.name,
+      earningType: earning?.type,
+      earningName: earning?.name,
       date: date,
       startTime: startTime,
       endTime: endTime,
-      hours: (hours - breaksDeduction).toFixed(2),
+      hours: hours ? (hours - breaksDeduction).toFixed(2) : 0,
       unpaidBreaks: breaksDeduction,
-      status: timesheet.status ? timesheet.status : "",
+      status: timesheet.status
+        ? `${timesheet.status[0].toUpperCase()}${timesheet.status.substring(1)}`
+        : "",
     };
   });
 
@@ -100,8 +103,8 @@ export const getReport = async (req, res) => {
     .map((el) => {
       return {
         ...el,
-        startTime: el.startTime.format("hh:mm a"),
-        endTime: el.endTime.format("hh:mm a"),
+        startTime: el.startTime ? el.startTime.format("hh:mm a") : "",
+        endTime: el.endTime ? el.endTime.format("hh:mm a") : "",
         date: el.date.format("MM/DD/YYYY"),
       };
     });

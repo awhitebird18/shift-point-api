@@ -1,4 +1,4 @@
-import Earning from '../models/earningModel.js';
+import Earning from "../models/earningModel.js";
 
 export const getEarnings = async (req, res) => {
   const earnings = await Earning.find();
@@ -9,25 +9,27 @@ export const getEarnings = async (req, res) => {
 };
 
 export const createEarning = async (req, res) => {
-  const newEarning = req.body.earning;
+  const newEarning = req.body;
 
   const earning = await Earning.create(newEarning);
 
   res.status(200).json({
-    status: 'success',
-    earning,
+    status: "success",
+    data: earning,
   });
 };
 
 export const updateEarning = async (req, res) => {
-  const earning = req.body.earning;
+  const earning = req.body;
   const id = req.params.id;
 
-  const updatedEarning = await Earning.findByIdAndUpdate(id, earning, { new: true });
+  const updatedEarning = await Earning.findByIdAndUpdate(id, earning, {
+    new: true,
+  });
 
   res.status(200).json({
-    status: 'success',
-    earning: updatedEarning,
+    status: "success",
+    data: updatedEarning,
   });
 };
 
@@ -37,7 +39,7 @@ export const deleteEarning = async (req, res) => {
   await Earning.findByIdAndDelete(id);
 
   res.status(200).json({
-    status: 'success',
+    status: "success",
     id,
   });
 };

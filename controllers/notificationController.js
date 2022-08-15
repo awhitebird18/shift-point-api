@@ -2,7 +2,7 @@ import Notification from "../models/notificationModel.js";
 import dayjs from "dayjs";
 
 export const getNotifications = async (req, res) => {
-  const lastWeek = dayjs().subtract(56, "day");
+  const lastWeek = dayjs().subtract(28, "day");
 
   const notifications = await Notification.find({ time: { $gte: lastWeek } });
 

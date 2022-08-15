@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 
 const earningSchema = new mongoose.Schema({
   name: String,
-  type: String,
   overtimeEligible: Boolean,
   primary: Boolean,
   rate: Number,

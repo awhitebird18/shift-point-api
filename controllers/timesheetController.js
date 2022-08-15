@@ -3,6 +3,7 @@ import Employee from "../models/employeeModel.js";
 import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 import Earning from "../models/earningModel.js";
+import dayjs from "dayjs";
 
 export const getTimesheets = async (req, res) => {
   const timesheetData = Timesheet.find({
@@ -78,9 +79,6 @@ export const getTimesheetDayStats = async (req, res) => {
   const currentMonth = currentTimestamp.getMonth();
   const currentDate = currentTimestamp.getDate();
   const todaysDate = new Date(currentYear, currentMonth, currentDate);
-  const startDate = new Date(2022, 3, 10);
-  const todaysDate2 = new Date(2022, 3, 11);
-  const endDate = new Date(2022, 3, 16);
 
   // Get Employees first. Need to find a better way of handling this as it is a copy from the employee controller
   const token = req.headers["x-access-token"];
@@ -114,37 +112,43 @@ export const getTimesheetDayStats = async (req, res) => {
 
   try {
     const timesheetData = await Timesheet.find({
-      $and: [
-        { date: { $gte: startDate } },
-        { date: { $lte: endDate } },
-        { eeNum: { $in: eeNums } },
-      ],
+      $and: [{ date: todaysDate }, { eeNum: { $in: eeNums } }],
     });
 
-    const totalPendingRecords = timesheetData.filter((el) => {
-      return el.status === "pending";
+    const missedPunches = timesheetData.filter((el) => {
+      if (!el.start && !el.end) return;
+
+      return el.status === "pending" && (!el.start || !el.end);
     }).length;
 
-    const totalApprovedRecords = timesheetData.filter((el) => {
-      return el.status === "approved";
-    }).length;
+    const timecardsSignedIn = timesheetData.filter((el) => {
+      return el.start;
+    });
 
-    const missingPunches = timesheetData.filter((el) => {
-      return el.status === "working" && el.date < todaysDate2;
-    }).length;
+    const timecardsSignedOut = timesheetData.filter((el) => {
+      return el.end;
+    });
 
-    const currentlyWorking = timesheetData.filter((el) => {
-      return (
-        el.status === "working" && el.date.getTime() === todaysDate2.getTime()
-      );
-    }).length;
+    const clockedIn = [
+      ...new Map(
+        timecardsSignedIn.map((timecard) => [timecard.eeNum, timecard])
+      ).values(),
+    ].length;
+
+    const clockedOut = [
+      ...new Map(
+        timecardsSignedOut.map((timecard) => [timecard.eeNum, timecard])
+      ).values(),
+    ].length;
 
     const stats = {
-      totalApprovedRecords,
-      totalPendingRecords,
-      missingPunches,
-      currentlyWorking,
+      missedPunches,
+      clockedIn,
+      clockedOut,
+      'cool'
     };
+
+    console.log(stats);
 
     res.status(200).json({
       status: "success",
@@ -251,8 +255,6 @@ export const getWeeklyEarningBreakdown = async (req, res) => {
   currentDate.setSeconds(0);
   currentDate.setMilliseconds(0);
 
-  console.log(currentDate);
-
   const startDate = new Date(currentDate);
   const endDate = new Date(currentDate);
 
@@ -268,8 +270,6 @@ export const getWeeklyEarningBreakdown = async (req, res) => {
     const timesheets = await Timesheet.find({
       $and: [{ date: { $gte: startDate } }, { date: { $lte: endDate } }],
     });
-
-    console.log(timesheets);
 
     const earningData = [];
 

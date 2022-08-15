@@ -33,8 +33,6 @@ export const getCurrentUser = async (req, res) => {
 
     const user = await User.findOne(searchParams);
 
-    console.log(user);
-
     res.status(200).json({
       status: "success",
       data: user,
@@ -48,6 +46,15 @@ export const getCurrentUser = async (req, res) => {
 
 export const createNewUserAccount = async (req, res) => {
   try {
+    const existingUser = await User.findOne({ username: req.body.username });
+
+    if (existingUser) {
+      return res.status(200).json({
+        status: "fail",
+        message: "Username already exists",
+      });
+    }
+
     if (
       !req.body.password ||
       !req.body.passwordConfirm ||
@@ -120,7 +127,7 @@ export const updateUserAccount = async (req, res) => {
 
   return res.status(200).json({
     status: "success",
-    updatedUser,
+    data: updatedUser,
   });
 };
 
