@@ -145,10 +145,7 @@ export const getTimesheetDayStats = async (req, res) => {
       missedPunches,
       clockedIn,
       clockedOut,
-      'cool'
     };
-
-    console.log(stats);
 
     res.status(200).json({
       status: "success",
