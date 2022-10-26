@@ -82,7 +82,6 @@ export const getTimesheetDayStats = async (req, res) => {
 
   // Get Employees first. Need to find a better way of handling this as it is a copy from the employee controller
   const token = req.headers["x-access-token"];
-  console.log(token);
 
   const decoded = jwt.verify(token, "secrettokenofdoom");
 

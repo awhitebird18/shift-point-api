@@ -33,8 +33,6 @@ export const getCurrentUser = async (req, res) => {
 
     const user = await User.findOne(searchParams);
 
-    console.log(user);
-
     res.status(200).json({
       status: "success",
       data: user,
@@ -95,11 +93,9 @@ export const createNewUserAccount = async (req, res) => {
 };
 
 export const loginUser = async (req, res) => {
-  console.log(req.body);
   const { clientId, username, password } = req.body;
 
   const user = await User.findOne({ clientId, username });
-  console.log(user);
 
   const result = await bcrypt.compare(password, user.password);
 

@@ -17,6 +17,8 @@ export const getShifts = async (req, res) => {
     $and: [{ date: { $gte: startDate } }, { date: { $lte: endDate } }],
   });
 
+  console.log(startDate, endDate);
+
   return res.status(200).json({
     status: "success",
     data: shifts,
