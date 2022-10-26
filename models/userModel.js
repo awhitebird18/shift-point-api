@@ -17,52 +17,7 @@ const userSchema = new mongoose.Schema({
       secondThreshold: Number,
     },
   },
-  moduleAccess: {
-    timesheet: {
-      access: Boolean,
-
-      payrate: Boolean,
-    },
-    scheduler: {
-      access: Boolean,
-    },
-    employees: {
-      access: Boolean,
-      personal: {
-        access: Boolean,
-      },
-      contact: {
-        access: Boolean,
-      },
-      department: {
-        access: Boolean,
-      },
-      position: {
-        access: Boolean,
-      },
-      payinfo: {
-        access: Boolean,
-      },
-    },
-    appSettings: {
-      access: Boolean,
-    },
-    reports: {
-      access: Boolean,
-    },
-    users: {
-      access: Boolean,
-      basicinfo: {
-        access: Boolean,
-      },
-      employee: {
-        access: Boolean,
-      },
-      module: {
-        access: Boolean,
-      },
-    },
-  },
+  moduleAccess: [{ moduleId: String, access: Boolean }],
   createdAt: {
     type: Date,
     default: Date.now(),
