@@ -68,8 +68,6 @@ app.get("/", (req, res) => {
 
 const date = new Date();
 
-console.log(date.getTimezoneOffset());
-
 mongoose
   .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {

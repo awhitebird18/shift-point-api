@@ -4,13 +4,13 @@ import Employee from "./models/employeeModel.js";
 import Shift from "./models/shiftModel.js";
 import dayjs from "dayjs";
 import fetch from "node-fetch";
-import e from "express";
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 
 const client = twilio(accountSid, authToken);
 
+// Every hour, look for notifications and send manager text
 setInterval(() => {
   const warningTime = 6;
   const currentTime = dayjs();
@@ -85,7 +85,7 @@ async function missedEmployeePunches() {
 
     if (index === shifts.length - 1) {
       const employeesMissedPunchesString = employeesMissedPunch.join("");
-      const messageFormatted = `TimeQP\n\n${employeesMissedPunchesString} have missed their ${dayjs(
+      const messageFormatted = `${employeesMissedPunchesString} have missed their ${dayjs(
         shift.start
       ).format("hh:mm a")} start time.`;
 
