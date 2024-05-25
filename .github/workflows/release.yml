@@ -44,9 +44,9 @@ jobs:
           echo "${{ secrets.SSH_KEY }}" > ssh_key
           chmod 600 ssh_key
           ssh -i ssh_key -o StrictHostKeyChecking=no root@${{ secrets.SSH_SERVER }} 'docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/shiftpoint:latest && \
-          docker stop shiftpoint-api || true && \
-          docker rm shiftpoint-api || true && \
-          docker run -d -p 5000:5000 --name shiftpoint-api ${{ secrets.DOCKER_HUB_USERNAME }}/shiftpoint-api:latest'
+          docker stop shiftpoint || true && \
+          docker rm shiftpoint || true && \
+          docker run -d -p 5000:5000 --name shiftpoint ${{ secrets.DOCKER_HUB_USERNAME }}/shiftpoint:latest'
 
       - name: Cleanup SSH key
         run: |
