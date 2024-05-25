@@ -1,0 +1,53 @@
+name: Deploy to DigitalOcean Droplet
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Build and push Docker image
+        run: |
+          export TAG=${{ github.sha }}
+          export IMAGE_NAME=${{ secrets.DOCKER_HUB_USERNAME }}/shiftpoint:$TAG
+          docker build --no-cache --build-arg NODE_ENV=production -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
+
+      - name: Setup SSH Key
+        run: |
+          echo "${{ secrets.SSH_KEY }}" > ssh_key
+          chmod 600 ssh_key
+
+      - name: Add SSH server to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KNOWN_HOSTS }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        run: |
+          echo "${{ secrets.SSH_KEY }}" > ssh_key
+          chmod 600 ssh_key
+          ssh -i ssh_key -o StrictHostKeyChecking=no root@${{ secrets.SSH_SERVER }} 'docker pull ${{ secrets.DOCKER_USERNAME }}/shiftpoint-api:latest && \
+          docker stop shiftpoint-api || true && \
+          docker rm shiftpoint-api || true && \
+          docker run -d -p 5000:5000 --name shiftpoint-api ${{ secrets.DOCKER_USERNAME }}/shiftpoint-api:latest'
+
+      - name: Cleanup SSH key
+        run: |
+          rm ssh_key
