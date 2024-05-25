@@ -48,7 +48,14 @@ jobs:
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/shiftpoint:$TAG &&
             docker stop shiftpoint || true &&
             docker rm shiftpoint || true &&
-            docker run -d -p 5000:5000 --name shiftpoint ${{ secrets.DOCKER_HUB_USERNAME }}/shiftpoint:$TAG
+            docker run -d -p 5000:5000 --name shiftpoint \
+              -e NODE_ENV=production \
+              -e TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }} \
+              -e TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }} \
+              -e CLOUD_NAME=${{ secrets.CLOUDINARY_NAME }} \
+              -e API_KEY=${{ secrets.CLOUDINARY_API_KEY }} \
+              -e API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }} \
+              ${{ secrets.DOCKER_HUB_USERNAME }}/shiftpoint:$TAG
           "
 
       - name: Cleanup SSH key
