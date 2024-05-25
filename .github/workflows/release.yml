@@ -44,10 +44,12 @@ jobs:
           export TAG=${{ github.sha }}
           echo "${{ secrets.SSH_KEY }}" > ssh_key
           chmod 600 ssh_key
-          ssh -i ssh_key -o StrictHostKeyChecking=no root@${{ secrets.SSH_SERVER }} 'docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/shiftpoint:$TAG && \
-          docker stop shiftpoint || true && \
-          docker rm shiftpoint || true && \
-          docker run -d -p 5000:5000 --name shiftpoint ${{ secrets.DOCKER_HUB_USERNAME }}/shiftpoint:$TAG'
+          ssh -i ssh_key -o StrictHostKeyChecking=no root@${{ secrets.SSH_SERVER }} "
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/shiftpoint:$TAG &&
+            docker stop shiftpoint || true &&
+            docker rm shiftpoint || true &&
+            docker run -d -p 5000:5000 --name shiftpoint ${{ secrets.DOCKER_HUB_USERNAME }}/shiftpoint:$TAG
+          "
 
       - name: Cleanup SSH key
         run: |
