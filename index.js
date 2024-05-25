@@ -4,7 +4,7 @@ import express from "express";
 import cors from "cors";
 
 // Will check for new notifications every 20 minutes. If there is, a text message will be sent to affected users.
-import "./send_sms.js";
+// import "./send_sms.js";
 
 import timesheetRoutes from "./routes/timesheetRoutes.js";
 import breaksheetRoutes from "./routes/breaksheetRoutes.js";
